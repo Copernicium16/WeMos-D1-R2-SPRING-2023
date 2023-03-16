@@ -102,15 +102,15 @@ void command(int numNewMessages, float Po, int h, int m, int s)
     timeClock(h, m, s);
     Serial.println(" Received " + msg.text);
     if (msg.text == "/help")
-      answer = "Butuh bantuan? Gunakan /start or /status";
+      answer = "Need help? use /start or /status";
     else if (msg.text == "/start")
-      answer = "Selamat datang *" + msg.from_name +"*.";
+      answer = "Welcome *" + msg.from_name +"*.";
     else if (msg.text == "/status")
-      answer = "Daring...";
+      answer = "Online...";
     else if (msg.text == "/data")
       if (Po < 6.5 or Po > 8.5)
       {
-        answer = "pH = *" + String(Po, 2) + "*\nSegera bersihkan kolam!";
+        answer = "pH = *" + String(Po, 2) + "*\nClean the pool immediately!";
       }
       else
       {
