@@ -4,9 +4,9 @@
 #include <math.h>
 #include <time.h>
 
-#define WIFI_SSID "Copernicium"
-#define WIFI_PASSWORD "b3mychr1st"
-#define BOT_TOKEN "5801176836:AAEfbSfU7TesTNIOoRl4-DhE7vcR4UjhBlQ"
+#define WIFI_SSID "****"
+#define WIFI_PASSWORD "****"
+#define BOT_TOKEN "****"
 
 const unsigned long BOT_MTBS = 1000;
 unsigned long bot_lasttime;
