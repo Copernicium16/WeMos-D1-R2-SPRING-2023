@@ -61,6 +61,7 @@ void loop()
   for(int i = 0; i < 800; i++)
   {
     pH_Value = analogRead(A0);
+    /*pH Sensor Input 5V*/
     voltpH = (5 / 1024.0) * pH_Value;
     pH_Step = (PH4 - PH7) / 3;
     Po += 7.00 + ((PH7 - voltpH) / pH_Step);
