@@ -104,7 +104,7 @@ void command(int numNewMessages, float Po, int h, int m, int s)
     if (msg.text == "/help")
       answer = "Need help? use /start or /status";
     else if (msg.text == "/start")
-      answer = "Welcome *" + msg.from_name +"*.";
+      answer = "Welcome *" + msg.from_name + "*.";
     else if (msg.text == "/status")
       answer = "Online...";
     else if (msg.text == "/data")
