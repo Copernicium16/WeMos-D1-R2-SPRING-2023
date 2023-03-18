@@ -125,8 +125,8 @@ void bot_setup()
   const String commands = F("["
                             "{\"command\":\"help\",  \"description\":\"Get bot usage help\"},"
                             "{\"command\":\"start\", \"description\":\"Message sent when you open a chat with a bot\"},"
-                            "{\"command\":\"status\",\"description\":\"Answer device current status\"},"
-                            "{\"command\":\"data\",\"description\":\"Send output data\"}"
+                            "{\"command\":\"status\", \"description\":\"Answer device current status\"},"
+                            "{\"command\":\"data\", \"description\":\"Send output data\"}"
                             "]");
   bot.setMyCommands(commands);
 }
