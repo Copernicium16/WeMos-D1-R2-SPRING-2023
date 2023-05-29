@@ -105,7 +105,7 @@ void command(int numNewMessages, float ntu, int h, int m, int s)
     else if (msg.text == "/status")
       answer = "Online...";
     else if (msg.text == "/data")
-      if (ntu < 50)
+      if (ntu > 50)
       {
         answer = "TDS = *" + String(ntu, 2) + "* NTU\nClean the pool immediately!";
       }
