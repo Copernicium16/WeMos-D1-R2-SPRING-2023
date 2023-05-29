@@ -10,14 +10,8 @@
 
 const unsigned long BOT_MTBS = 1000;
 unsigned long bot_lasttime;
-float Po;
-float pH_Step;
-float PH7 = ;
-float PH4 = ;
 int dst;
-int pH_Value;
-int timezone = 7*3600;
-double voltpH;
+int timezone = 7 * 3600;
 
 X509List cert(TELEGRAM_CERTIFICATE_ROOT);
 WiFiClientSecure secured_client;
@@ -53,6 +47,7 @@ void setup()
 
 void loop()
 {
+  Turbidity_Sensor_Voltage = 0;
   time_t now = time(nullptr);
   struct tm* p_tm = localtime(&now);
   int h = p_tm->tm_hour;
@@ -60,16 +55,22 @@ void loop()
   int s = p_tm->tm_sec;
   for(int i = 0; i < 800; i++)
   {
-    pH_Value = analogRead(A0);
-    /*pH Sensor Input 5V*/
-    voltpH = (5 / 1024.0) * pH_Value;
-    pH_Step = (PH4 - PH7) / 3;
-    Po += 7.00 + ((PH7 - voltpH) / pH_Step);
+    Turbidity_Sensor_Voltage += ((float)analogRead(Turbidity_Sensor_Pin) / 1023) * 5;
   }
-  Po = Po / 800;
+  Turbidity_Sensor_Voltage = Turbidity_Sensor_Voltage / 800;
+  Turbidity_Sensor_Voltage = round_to_dp(Turbidity_Sensor_Voltage, 2);
+  if(Turbidity_Sensor_Voltage < 2.5)
+  {
+    ntu = 3000;
+  }
+  else
+  {
+    ntu = (-1120.4 * Turbidity_Sensor_Voltage * Turbidity_Sensor_Voltage) + (5742.3 * Turbidity_Sensor_Voltage) - 4352.9; 
+  }
   timeClock(h, m, s);
   Serial.print(" ");
-  Serial.println(Po);
+  Serial.print(ntu);
+  Serial.print(" NTU");
   if (millis() - bot_lasttime > BOT_MTBS)
   {
     int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
@@ -77,24 +78,20 @@ void loop()
     {
       timeClock(h, m, s);
       Serial.println(" Got response");
-      command(numNewMessages, Po, h, m, s);
+      command(numNewMessages, ntu, h, m, s);
       numNewMessages = bot.getUpdates(bot.last_message_received + 1);
     }
     bot_lasttime = millis();
   }
-  Po = 0;
   delay(3000);
 }
 
-void command(int numNewMessages, float Po, int h, int m, int s)
+void command(int numNewMessages, float ntu, int h, int m, int s)
 {
   timeClock(h, m, s);
-  Serial.println(" Handle ");
-  timeClock(h, m, s);
-  Serial.print(" ");
-  Serial.println(numNewMessages);
-  timeClock(h, m, s);
-  Serial.println(" message");
+  Serial.print(" Handle ");
+  Serial.print(numNewMessages);
+  Serial.print(" message");
   String answer;
   for (int i = 0; i < numNewMessages; i++)
   {
@@ -108,13 +105,13 @@ void command(int numNewMessages, float Po, int h, int m, int s)
     else if (msg.text == "/status")
       answer = "Online...";
     else if (msg.text == "/data")
-      if (Po < 6.5 or Po > 8.5)
+      if (ntu < 50)
       {
-        answer = "pH = *" + String(Po, 2) + "*\nClean the pool immediately!";
+        answer = "TDS = *" + String(ntu, 2) + "* NTU\nClean the pool immediately!";
       }
       else
       {
-        answer = "pH = *" + String(Po, 2) + "*";
+        answer = "TDS = *" + String(ntu, 2) + "* NTU";
       }
     bot.sendMessage(msg.chat_id, answer, "Markdown");
   }
