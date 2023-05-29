@@ -11,6 +11,7 @@
 const unsigned long BOT_MTBS = 1000;
 unsigned long bot_lasttime;
 int dst;
+float ntu;
 int timezone = 7 * 3600;
 
 X509List cert(TELEGRAM_CERTIFICATE_ROOT);
@@ -47,7 +48,7 @@ void setup()
 
 void loop()
 {
-  Turbidity_Sensor_Voltage = 0;
+  float Turbidity_Sensor_Voltage = 0;
   time_t now = time(nullptr);
   struct tm* p_tm = localtime(&now);
   int h = p_tm->tm_hour;
@@ -55,7 +56,7 @@ void loop()
   int s = p_tm->tm_sec;
   for(int i = 0; i < 800; i++)
   {
-    Turbidity_Sensor_Voltage += ((float)analogRead(Turbidity_Sensor_Pin) / 1023) * 5;
+    Turbidity_Sensor_Voltage += ((float)analogRead(A0) / 1023) * 5;
   }
   Turbidity_Sensor_Voltage = Turbidity_Sensor_Voltage / 800;
   Turbidity_Sensor_Voltage = round_to_dp(Turbidity_Sensor_Voltage, 2);
